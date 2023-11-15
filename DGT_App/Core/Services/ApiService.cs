@@ -2,7 +2,12 @@
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+<<<<<<< HEAD
 using Newtonsoft;
+=======
+using Newtonsoft.Json;
+
+>>>>>>> 44eb7b1a5e74833e229fa5c1b64c93e7a389734b
 
 namespace DGT_App.Core.Services
 {
@@ -23,10 +28,17 @@ namespace DGT_App.Core.Services
             {
                 var apiUrl = "https://api.hackerearth.com/v4/partner/code-evaluation/submissions/";
 
+<<<<<<< HEAD
                 // Add the API key to the request header
                 _httpClient.DefaultRequestHeaders.Add("client-secret", "70c9f299c6c510bb76386e0f996956ba8cadde50");
 
                 // Form the POST request body
+=======
+                //  add a key API to a query header
+                _httpClient.DefaultRequestHeaders.Add("client-secret", _apiKey);
+
+                // POST REQUEST Body Shaping
+>>>>>>> 44eb7b1a5e74833e229fa5c1b64c93e7a389734b
                 var requestBody = new
                 {
                     lang = language,
@@ -41,10 +53,17 @@ namespace DGT_App.Core.Services
                 var jsonBody = Newtonsoft.Json.JsonConvert.SerializeObject(requestBody);
                 var content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
 
+<<<<<<< HEAD
                 
                 HttpResponseMessage response = await _httpClient.PostAsync(apiUrl, content);
 
                 // Test request success
+=======
+                // Post query execution
+                HttpResponseMessage response = await _httpClient.PostAsync(apiUrl, content);
+
+                // Request success check
+>>>>>>> 44eb7b1a5e74833e229fa5c1b64c93e7a389734b
                 if (response.IsSuccessStatusCode)
                 {
                     return await response.Content.ReadAsStringAsync();
