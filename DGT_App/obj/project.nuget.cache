@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "3SfCvk3SbVo23hs3oh0RbrslElxY7tKtqNRzGPpE7IOyUilJ88MQ45m0vwPT0eZHzajr8UoT9WvKlBSUF0KCmg==",
+  "dgSpecHash": "hbvTQH73LVwWsZPeJuN2J6suA0bcx/UiJUmG/yeocp7CnQIhMsxcQMyrB9l9/fbiTv9nPYCi3I+sWtUacc6OzQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\kyper\\source\\repos\\DGT_App\\DGT_App\\DGT_App.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\kyper\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512"
+  ],
   "logs": []
 }
