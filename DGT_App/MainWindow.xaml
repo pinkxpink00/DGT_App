@@ -5,8 +5,28 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DGT_App"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Title="Code Sandbox" Height="450" Width="800">
 
+    <Grid>
+        <!-- TextBox for Source Code -->
+        <TextBox x:Name="codeTextBox" TextWrapping="Wrap" AcceptsReturn="True" 
+                 VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"
+                 Text="{Binding SourceCode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+        <!-- ComboBox for Selecting Language -->
+        <ComboBox x:Name="languageComboBox" HorizontalAlignment="Left" VerticalAlignment="Top"
+          ItemsSource="{Binding Languages}"
+          SelectedValuePath="Tag"
+          SelectedValue="{Binding SelectedLanguage, Mode=TwoWay}" Margin="0,52,0,0">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding DisplayName}" />
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+
+        <!-- Button to Run Code -->
+        <Button Content="Run Code" HorizontalAlignment="Left" VerticalAlignment="Top" 
+                Command="{Binding RunCodeCommand}" Margin="71,2,0,0"/>
     </Grid>
 </Window>

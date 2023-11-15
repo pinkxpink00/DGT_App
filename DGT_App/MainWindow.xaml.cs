@@ -1,28 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Net.Http;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using DGT_App.Core.Services;
+using DGT_App.ViewModels;
 
 namespace DGT_App
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
+        private readonly TaskService _taskService;
+
         public MainWindow()
         {
             InitializeComponent();
+            
+            _taskService = new TaskService(new ApiService(new HttpClient(), "70c9f299c6c510bb76386e0f996956ba8cadde50"));
+
+            DataContext = new MainViewModel(_taskService);
         }
     }
 }
