@@ -19,6 +19,7 @@ namespace DGT_App.ViewModels
         private ObservableCollection<LanguageModel> _languages;
         private LanguageModel _selectedLanguage;
         private string _sourceCode;
+        private string _errorMessage;
 
         public ObservableCollection<LanguageModel> Languages
         {
@@ -99,38 +100,82 @@ namespace DGT_App.ViewModels
 
         private async void ExecuteRunCodeCommand(object parameter)
         {
-            // Проверяем, что выбран язык программирования
+            
             if (SelectedLanguage == null)
             {
                 
+                ShowMessage("Please select a programming language.");
                 return;
             }
 
-            // Проверяем, что введен код
+            
             if (string.IsNullOrWhiteSpace(SourceCode))
             {
                 
+                ShowMessage("Please enter code before running.");
                 return;
             }
 
-            // Создаем уникальный идентификатор для запроса
+            
             var requestId = Guid.NewGuid().ToString();
 
-            // Отправляем код на выполнение
+            
             var submissionResult = await _taskService.ExecuteCodeAsync(
                 SelectedLanguage.Tag,
                 SourceCode,
                 input: "",
-                memoryLimit: 256, // Пример ограничения по памяти (в мегабайтах)
-                timeLimit: 1000, // Пример ограничения по времени выполнения (в миллисекундах)
+                memoryLimit: 256, 
+                timeLimit: 1000, 
                 context: "sandbox",
-                callbackUrl: $"http://your-callback-url/{requestId}" // Указывайте ваш реальный callback URL
+                callbackUrl: $"https://client.com/callback/" 
             );
 
-            
+           
             Console.WriteLine(submissionResult);
 
-  
+            
+            if (submissionResult.Contains("Error"))
+            {
+                
+                var errorMessage = ParseErrorMessage(submissionResult);
+                ShowMessage($"Error: {errorMessage}");
+            }
+            else
+            {
+               
+                ShowMessage("Code submitted successfully. Waiting for results...");
+            }
+
+            
+        }
+
+        
+        private void ShowMessage(string message)
+        {
+            
+            ErrorMessage = message;
+            
+            Console.WriteLine(message);
+        }
+
+        
+        private string ParseErrorMessage(string submissionResult)
+        {
+            
+            return submissionResult;
+        }
+
+        public string ErrorMessage
+        {
+            get { return _errorMessage; }
+            set
+            {
+                if (_errorMessage != value)
+                {
+                    _errorMessage = value;
+                    OnPropertyChanged();
+                }
+            }
         }
 
         private bool CanExecuteRunCodeCommand(object parameter)

@@ -2,7 +2,6 @@
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using Newtonsoft;
 
 namespace DGT_App.Core.Services
 {
@@ -23,8 +22,12 @@ namespace DGT_App.Core.Services
             {
                 var apiUrl = "https://api.hackerearth.com/v4/partner/code-evaluation/submissions/";
 
-                // Add the API key to the request header
-                _httpClient.DefaultRequestHeaders.Add("client-secret", "70c9f299c6c510bb76386e0f996956ba8cadde50");
+                // Clear headers for each request
+                _httpClient.DefaultRequestHeaders.Clear();
+
+                // Add mandatory headers
+                _httpClient.DefaultRequestHeaders.Add("content-type", "application/json");
+                _httpClient.DefaultRequestHeaders.Add("client-secret", _apiKey);
 
                 // Form the POST request body
                 var requestBody = new
@@ -41,22 +44,15 @@ namespace DGT_App.Core.Services
                 var jsonBody = Newtonsoft.Json.JsonConvert.SerializeObject(requestBody);
                 var content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
 
-                
-                HttpResponseMessage response = await _httpClient.PostAsync(apiUrl, content);
-
-                // Test request success
-                if (response.IsSuccessStatusCode)
+                using (HttpResponseMessage response = await _httpClient.PostAsync(apiUrl, content))
                 {
+                    response.EnsureSuccessStatusCode();
                     return await response.Content.ReadAsStringAsync();
                 }
-                else
-                {
-                    return $"Error: {response.StatusCode} - {response.ReasonPhrase}";
-                }
             }
-            catch (Exception ex)
+            catch (HttpRequestException ex)
             {
-                return $"Error: {ex.Message}";
+                throw new HttpRequestException($"HTTP request error: {ex.Message}", ex);
             }
         }
 
@@ -66,25 +62,20 @@ namespace DGT_App.Core.Services
             {
                 var apiUrl = $"https://api.hackerearth.com/v4/partner/code-evaluation/submissions/{submissionId}/";
 
-                // To add a key API to a query header
+                // Add the API key to the request header
+                _httpClient.DefaultRequestHeaders.Clear();
                 _httpClient.DefaultRequestHeaders.Add("client-secret", _apiKey);
 
-                // Executing GET-Query
-                HttpResponseMessage response = await _httpClient.GetAsync(apiUrl);
-
-                // Request success check
-                if (response.IsSuccessStatusCode)
+                // Execute GET request
+                using (HttpResponseMessage response = await _httpClient.GetAsync(apiUrl))
                 {
+                    response.EnsureSuccessStatusCode();
                     return await response.Content.ReadAsStringAsync();
                 }
-                else
-                {
-                    return $"Error: {response.StatusCode} - {response.ReasonPhrase}";
-                }
             }
-            catch (Exception ex)
+            catch (HttpRequestException ex)
             {
-                return $"Error: {ex.Message}";
+                throw new HttpRequestException($"HTTP request error: {ex.Message}", ex);
             }
         }
     }
