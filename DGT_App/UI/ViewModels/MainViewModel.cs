@@ -1,12 +1,15 @@
-﻿// MainViewModel.cs
+﻿using System;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Net.Http;
+using System.Runtime.CompilerServices;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Input;
 using DGT_App.Core.Commands;
 using DGT_App.Core.Models;
 using DGT_App.Core.Services;
-using System;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using System.Windows.Input;
+using Newtonsoft.Json;
 
 namespace DGT_App.ViewModels
 {
@@ -64,6 +67,7 @@ namespace DGT_App.ViewModels
 
             Languages = new ObservableCollection<LanguageModel>
             {
+
                 new LanguageModel { DisplayName = "C", Tag = "C" },
                 new LanguageModel { DisplayName = "C++14", Tag = "CPP14" },
                 new LanguageModel { DisplayName = "C++17", Tag = "CPP17" },
@@ -95,13 +99,43 @@ namespace DGT_App.ViewModels
 
         private async void ExecuteRunCodeCommand(object parameter)
         {
-            // Здесь вызывайте соответствующие методы сервиса для выполнения кода
-            // Например: await _taskService.ExecuteCodeAsync(SelectedLanguage.Tag, SourceCode, ...);
+            // Проверяем, что выбран язык программирования
+            if (SelectedLanguage == null)
+            {
+                
+                return;
+            }
+
+            // Проверяем, что введен код
+            if (string.IsNullOrWhiteSpace(SourceCode))
+            {
+                
+                return;
+            }
+
+            // Создаем уникальный идентификатор для запроса
+            var requestId = Guid.NewGuid().ToString();
+
+            // Отправляем код на выполнение
+            var submissionResult = await _taskService.ExecuteCodeAsync(
+                SelectedLanguage.Tag,
+                SourceCode,
+                input: "",
+                memoryLimit: 256, // Пример ограничения по памяти (в мегабайтах)
+                timeLimit: 1000, // Пример ограничения по времени выполнения (в миллисекундах)
+                context: "sandbox",
+                callbackUrl: $"http://your-callback-url/{requestId}" // Указывайте ваш реальный callback URL
+            );
+
+            
+            Console.WriteLine(submissionResult);
+
+  
         }
 
         private bool CanExecuteRunCodeCommand(object parameter)
         {
-            // Реализуйте логику, чтобы кнопка была доступна только при выполнении определенных условий
+            
             return true;
         }
 

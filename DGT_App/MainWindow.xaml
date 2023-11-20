@@ -7,17 +7,17 @@
         mc:Ignorable="d"
         Title="Code Sandbox" Height="450" Width="800">
 
-    <Grid>
+    <Grid Background="Bisque">
         <!-- TextBox for Source Code -->
-        <TextBox x:Name="codeTextBox" TextWrapping="Wrap" AcceptsReturn="True" 
+        <TextBox x:Name="codeTextBox" Background="White"  TextWrapping="Wrap" AcceptsReturn="True" 
                  VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"
-                 Text="{Binding SourceCode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                 Text="{Binding SourceCode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="0,79,0,0"/>
 
         <!-- ComboBox for Selecting Language -->
         <ComboBox x:Name="languageComboBox" HorizontalAlignment="Left" VerticalAlignment="Top"
           ItemsSource="{Binding Languages}"
           SelectedValuePath="Tag"
-          SelectedValue="{Binding SelectedLanguage, Mode=TwoWay}" Margin="0,52,0,0">
+          SelectedValue="{Binding SelectedLanguage.Tag, Mode=TwoWay}">
             <ComboBox.ItemTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding DisplayName}" />
@@ -25,8 +25,9 @@
             </ComboBox.ItemTemplate>
         </ComboBox>
 
+
         <!-- Button to Run Code -->
         <Button Content="Run Code" HorizontalAlignment="Left" VerticalAlignment="Top" 
-                Command="{Binding RunCodeCommand}" Margin="71,2,0,0"/>
+                Command="{Binding RunCodeCommand}" Margin="122,0,0,0" Height="22" Width="84"/>
     </Grid>
 </Window>
